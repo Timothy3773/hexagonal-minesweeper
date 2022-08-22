@@ -2,7 +2,7 @@ var container = document.getElementById('game')
 var set3D = document.getElementById('set3D')
 
 set3D.addEventListener("input", (ev) => {
-    set3D.checked ? set3D.classList.add("is3d") : set3D.classList.remove("is3d")
+    set3D.checked ? container.classList.add("is3d") : container.classList.remove("is3d")
 })
 
 /**
@@ -116,7 +116,7 @@ class CellManager {
 
     generateMines = async () => {
         this.cells.forEach((cell, index, board) => {
-            
+
         })
     }
 
