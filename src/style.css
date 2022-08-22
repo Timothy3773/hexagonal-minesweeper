@@ -15,6 +15,11 @@ body {
 .container {
     font-size: 0;
     grid-column: 1/-1;
+}
+
+.container.is3d {
+    font-size: 0;
+    grid-column: 1/-1;
     -webkit-transform: perspective(600px) rotateX(60deg);
     -moz-transform: perspective(600px) rotateX(60deg);
     -ms-transform: perspective(600px) rotateX(60deg);

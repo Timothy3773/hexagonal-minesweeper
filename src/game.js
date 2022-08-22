@@ -1,4 +1,9 @@
 var container = document.getElementById('game') 
+var set3D = document.getElementById('set3D')
+
+set3D.addEventListener("input", (ev) => {
+    set3D.checked ? set3D.classList.add("is3d") : set3D.classList.remove("is3d")
+})
 
 /**
  * This is to have a clean board, the board data (array) is nested in this class.
@@ -22,6 +27,12 @@ class CellManager {
      * Array of cells, all cells are added in here.
      */
     cells = []
+
+    clearBoard = () => {
+        this.cells = []
+        container.innerHTML = ""
+        return this.cells
+    }
 
     getCell = (x,y) => {
         let search = this.cells.find(c => c.x === x && c.y === y)
@@ -78,7 +89,7 @@ class CellManager {
         if (typeof cellData == "object"){
             this.cells.push(cellData)
         }else{
-            throw Error("cellData must be type object")
+            throw "cellData must be type object"
         }
     }
 
@@ -95,6 +106,9 @@ class CellManager {
                 let obj = {x: xPos, y: row, type: null, opened: false, html: cellHTML, isOffset}
                 this.add(obj)
                 rowHTML.appendChild(cellHTML)
+                cellHTML.addEventListener("click", (ev) => {
+                    onClick(obj, ev.shiftKey)
+                })
             }
         }
         return this.cells
@@ -113,11 +127,16 @@ class CellManager {
     }
 }
 
-var onClick = (cell) => {
-
+/**
+ * 
+ * @param {any} cell The cell
+ * @param {boolean} shiftKey Whether the shift key was pressed
+ */
+var onClick = (cell, shiftKey) => {
+    console.log("Cell", cell, "Shift key?", shiftKey)
 }
 
-var board = new CellManager({rows: 2, cellsPerRow: 2, mineDensity: 5})
+var board = new CellManager({rows: 11, cellsPerRow: 11, mineDensity: 5})
 
 board.generateBoard().then(() => {
     board.setAdjacentCells()
