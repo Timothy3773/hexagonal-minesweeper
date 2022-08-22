@@ -3,14 +3,23 @@ body {
 }
 
 .main {
-    display: flex;
-    --s: 100px;
+    display: grid;
+    --s: 50px;
     --m: 2px;
     --f: calc(1.732 * var(--s) + 4 * var(--m) - 1px);
+    border: 1px solid #000;
+    grid-template-columns: repeat(auto-fit, calc(var(--s) + 2*var(--mh)));
+    justify-content: center;
 }
 
 .container {
     font-size: 0;
+    grid-column: 1/-1;
+    -webkit-transform: perspective(600px) rotateX(60deg);
+    -moz-transform: perspective(600px) rotateX(60deg);
+    -ms-transform: perspective(600px) rotateX(60deg);
+    -o-transform: perspective(600px) rotateX(60deg);
+    transform: perspective(600px) rotateX(60deg);
 }
 
 .container div {
@@ -24,7 +33,7 @@ body {
     margin-bottom: calc(var(--m) - var(--s)*0.2885);
 }
 
-.container div:nth-child(even) {
+.container div:nth-child(odd) {
     background: rgb(26, 187, 26);
 }
 
@@ -33,8 +42,6 @@ body {
     width: calc(var(--s)/2 + var(--m));
     float: left;
     height: 120%;
-    shape-outside: repeating-linear-gradient(
-        #0000 0 calc(var(--f) - 3px),
-        #000 0 var(--f)
-    );
+    shape-outside: repeating-linear-gradient(#0000 0 calc(var(--f) - 3px),
+            #000 0 var(--f));
 }
