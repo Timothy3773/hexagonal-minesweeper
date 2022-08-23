@@ -1,6 +1,21 @@
 var container = document.getElementById('game') 
 var set3D = document.getElementById('set3D')
 
+var losingSound = new Audio("./src/yippee-1.mp4")
+
+var colors = {
+    "bomb": 'red',
+    'empty': 'orange',
+    "type1": "royalblue",
+    "type2": "slateblue",
+    "type3": "skyblue",
+    "type4": "aquamarine",
+    "type5": "greenyellow",
+    "type6": "chocolate"
+}
+
+
+
 set3D.addEventListener("input", (ev) => {
     set3D.checked ? container.classList.add("is3d") : container.classList.remove("is3d")
 })
@@ -150,6 +165,7 @@ class CellManager {
         let nullCells = this.cells.filter(c => c.type == null)
         for (const cell of nullCells){
             cell.type = "empty"
+            cell.html.classList.add(`empty`)
         }
     }
 
@@ -167,11 +183,20 @@ class CellManager {
  */
 var onClick = (cell, shiftKey) => {
     if (cell.opened == false){
+        cell.opened = true
+        cell.html.style.backgroundColor = colors[cell.type]
         switch (cell.type){
             case "bomb":
-                console.log("bomb pressed")
+                cell.html.classList.add("opened")
+                losingSound.play().then(d => {
+                    setTimeout(() => {
+                        window.location.reload()
+                    }, 500)
+                })
+            case "empty":
+                cell.html.classList.add("opened")
             default:
-                return null
+                cell.html.classList.add("opened")
         }
     }
 }
