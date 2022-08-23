@@ -5,6 +5,12 @@ set3D.addEventListener("input", (ev) => {
     set3D.checked ? container.classList.add("is3d") : container.classList.remove("is3d")
 })
 
+var round = (value, step) => {
+    step || (step = 1.0);
+    var inv = 1.0 / step;
+    return Math.round(value * inv) / inv;
+}
+
 /**
  * This is to have a clean board, the board data (array) is nested in this class.
  */
@@ -115,9 +121,15 @@ class CellManager {
     }
 
     generateMines = async () => {
-        this.cells.forEach((cell, index, board) => {
-
-        })
+        for (let mineCount = 0; mineCount < this.mineDensity; mineCount++){
+            let randomPos = {x: round(Math.random() * this.rows, 0.5), y: Math.floor(Math.random() * this.cellsPerRow)}
+            let wantedCell = this.getCell(randomPos.x, randomPos.y)
+            if (wantedCell && wantedCell.type == null){
+                wantedCell.type = "bomb"
+                wantedCell.html.classList.add("bomb")
+            }
+            if (wantedCell == null) mineCount--
+        }
     }
 
     setAdjacentCells = async () => {
@@ -136,10 +148,17 @@ var onClick = (cell, shiftKey) => {
     console.log("Cell", cell, "Shift key?", shiftKey)
 }
 
-var board = new CellManager({rows: 11, cellsPerRow: 11, mineDensity: 5})
+var board = new CellManager({rows: 20, cellsPerRow: 20, mineDensity: 20})
 
-board.generateBoard().then(() => {
-    board.setAdjacentCells()
+board.generateBoard().then(async () => {
+    await board.setAdjacentCells().then(async () => {
+        await board.generateMines().then(d => {
+            console.log(board.cells.filter(c => c.type == "bomb"))
+            board.cells.forEach((cell) => {
+                cell.html.title = `x: ${cell.x}\ny: ${cell.y}\nType: ${cell.type}`
+            })
+        })
+    })
 })
 
 

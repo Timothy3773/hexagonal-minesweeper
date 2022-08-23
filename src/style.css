@@ -1,12 +1,13 @@
 body {
     background-color: rgb(49, 49, 49);
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .main {
     display: grid;
-    --s: 50px;
+    --s: 20px;
     --m: 2px;
-    --f: calc(1.732 * var(--s) + 4 * var(--m) - 1px);
+    --f: calc(1.732 * var(--s) + 4.4 * var(--m) - 1px);
     border: 1px solid #000;
     grid-template-columns: repeat(auto-fit, calc(var(--s) + 2*var(--mh)));
     justify-content: center;
@@ -38,15 +39,29 @@ body {
     margin-bottom: calc(var(--m) - var(--s)*0.2885);
 }
 
-.container div:nth-child(odd) {
-    background: rgb(26, 187, 26);
-}
+
 
 .container::before {
     content: "";
     width: calc(var(--s)/2 + var(--m));
     float: left;
-    height: 120%;
+    height: 500%;
     shape-outside: repeating-linear-gradient(#0000 0 calc(var(--f) - 3px),
             #000 0 var(--f));
+}
+
+#panel {
+    color: white;
+}
+
+#panel ul {
+    list-style-type: none;
+}
+
+kbd {
+    background-color: rgba(0, 0, 0, 0.273);
+}
+
+div.bomb {
+    background-color: red;
 }
