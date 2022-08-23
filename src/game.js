@@ -132,6 +132,27 @@ class CellManager {
         }
     }
 
+    generateNumbers = async () => {
+        let mines = this.cells.filter(c => c.type == "bomb")
+        for (const mine of mines){
+            let surroundingCells = mine.adjacentCells
+            for (const cell of surroundingCells){
+                if (cell.type !== "bomb"){
+                let touchingMines = cell.adjacentCells.filter(t => t.type == "bomb")
+                cell.html.classList.add(`type${touchingMines.length}`)
+                cell.type = touchingMines.length > 0 ? `type${touchingMines.length}` : 'empty'
+                }
+            }
+        }
+    }
+
+    generateEmptyCells = async ()  => {
+        let nullCells = this.cells.filter(c => c.type == null)
+        for (const cell of nullCells){
+            cell.type = "empty"
+        }
+    }
+
     setAdjacentCells = async () => {
         for (const cell of this.cells){
             cell.adjacentCells = this.getAdjacentCells(cell.x, cell.y, cell.isOffset)
@@ -145,15 +166,23 @@ class CellManager {
  * @param {boolean} shiftKey Whether the shift key was pressed
  */
 var onClick = (cell, shiftKey) => {
-    console.log("Cell", cell, "Shift key?", shiftKey)
+    if (cell.opened == false){
+        switch (cell.type){
+            case "bomb":
+                console.log("bomb pressed")
+            default:
+                return null
+        }
+    }
 }
 
-var board = new CellManager({rows: 20, cellsPerRow: 20, mineDensity: 20})
+var board = new CellManager({rows: 20, cellsPerRow: 20, mineDensity: 30})
 
 board.generateBoard().then(async () => {
     await board.setAdjacentCells().then(async () => {
-        await board.generateMines().then(d => {
-            console.log(board.cells.filter(c => c.type == "bomb"))
+        await board.generateMines().then(async d => {
+            await board.generateNumbers()
+            await board.generateEmptyCells()
             board.cells.forEach((cell) => {
                 cell.html.title = `x: ${cell.x}\ny: ${cell.y}\nType: ${cell.type}`
             })
